@@ -1,10 +1,5 @@
 package com.nouman.notevibe.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -96,14 +91,14 @@ fun FocusSlotCard(
                 Spacer(modifier = Modifier.width(14.dp))
                 Column {
                     Text(
-                        text = "Focus Slot #$slotNumber Available",
+                        text = "Focus Slot #$slotNumber",
                         style = MaterialTheme.typography.titleSmall,
                         color = textSecondary,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "Pin a key task to concentrate on what matters most",
+                        text = "Tap to assign priority task",
                         style = MaterialTheme.typography.bodySmall,
                         color = IosTextTertiaryLight,
                         fontSize = 12.sp
@@ -195,18 +190,10 @@ fun FocusSlotCard(
                             .springClickable(onClick = onToggleCompletion),
                         contentAlignment = Alignment.Center
                     ) {
-                        AnimatedVisibility(
-                            visible = note.isCompleted,
-                            enter = fadeIn(spring(stiffness = Spring.StiffnessHigh)),
-                            exit = fadeOut()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = "Completed",
-                                tint = Color.White,
-                                modifier = Modifier.size(15.dp)
-                            )
-                        }
+                        CompletedCheckIcon(
+                            isCompleted = note.isCompleted,
+                            size = 15.dp
+                        )
                     }
 
                     Spacer(modifier = Modifier.width(12.dp))
@@ -236,8 +223,13 @@ fun FocusSlotCard(
                         // Days until auto-archive hint if completed
                         if (note.isCompleted && note.daysUntilArchive != null) {
                             Spacer(modifier = Modifier.height(8.dp))
+                            val archiveHint = when (note.daysUntilArchive) {
+                                0 -> "Auto-archives today"
+                                1 -> "Auto-archives tomorrow"
+                                else -> "Auto-archives in ${note.daysUntilArchive} days"
+                            }
                             Text(
-                                text = "Auto-archives in ${note.daysUntilArchive} days",
+                                text = archiveHint,
                                 fontSize = 11.sp,
                                 color = textSecondary,
                                 fontWeight = FontWeight.Medium

@@ -74,6 +74,7 @@ fun MainScreen(
                             onNoteClick = { onNavigateToEditor(it.id) },
                             onToggleCompletion = { viewModel.onToggleCompletion(it) },
                             onUnpin = { viewModel.onTogglePin(it) },
+                            onPinExisting = { viewModel.onTogglePin(it) },
                             onNavigateToCreate = { onNavigateToEditor(0L) }
                         )
                     }
@@ -92,9 +93,11 @@ fun MainScreen(
                     BottomTab.ARCHIVE -> {
                         ArchiveScreen(
                             uiState = uiState,
+                            onNoteClick = { onNavigateToEditor(it.id) },
                             onRestoreNote = { viewModel.onRestoreNote(it) },
                             onDeleteNote = { viewModel.onDeleteNote(it) },
-                            onClearArchive = { viewModel.onClearArchive() }
+                            onClearArchive = { viewModel.onClearArchive() },
+                            onSearchQueryChanged = { viewModel.onSearchQueryChanged(it) }
                         )
                     }
                 }

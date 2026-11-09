@@ -69,8 +69,8 @@ interface NoteDao {
 
     @Query("""
         UPDATE notes 
-        SET is_archived = 0 
+        SET is_archived = 0, is_completed = 0, completed_at = NULL, updated_at = :now 
         WHERE id = :id
     """)
-    suspend fun restoreArchivedNote(id: Long)
+    suspend fun restoreArchivedNote(id: Long, now: Long)
 }

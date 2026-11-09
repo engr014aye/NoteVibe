@@ -1,7 +1,8 @@
 package com.nouman.notevibe.presentation.screens.editor
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -75,6 +78,10 @@ fun NoteEditorScreen(
     val textSecondary = if (isDark) IosTextSecondaryDark else IosTextSecondaryLight
     val snackbarHostState = remember { SnackbarHostState() }
 
+    BackHandler {
+        onBackClick()
+    }
+
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
             onBackClick()
@@ -93,6 +100,7 @@ fun NoteEditorScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
@@ -153,7 +161,7 @@ fun NoteEditorScreen(
 
             // Priority Selection Row
             Text(
-                text = "PRIORITY TAG",
+                text = "PRIORITY",
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 color = IosTextTertiaryLight,
@@ -174,6 +182,9 @@ fun NoteEditorScreen(
                             .clip(SquirclePill)
                             .background(
                                 if (isSelected) accent.copy(alpha = 0.2f) else if (isDark) Color(0xFF1C1C1E) else Color(0xFFE5E5EA)
+                            )
+                            .then(
+                                if (isSelected) Modifier.border(1.5.dp, accent, SquirclePill) else Modifier
                             )
                             .springClickable(onClick = { onPriorityChanged(priority) })
                             .padding(vertical = 10.dp),
@@ -214,16 +225,16 @@ fun NoteEditorScreen(
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = "Pin to Focus Board",
+                                text = "Pin to Focus (Top 3)",
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
                                 color = textPrimary
                             )
                             Text(
                                 text = if (uiState.focusBoardFull && !uiState.isPinnedToFocus)
-                                    "Board is full (3/3 slots occupied)"
+                                    "Focus is full (3/3 slots occupied)"
                                 else
-                                    "Keeps this note on your 3-slot priority board",
+                                    "Keep on your top daily dashboard",
                                 style = MaterialTheme.typography.bodySmall,
                                 fontSize = 12.sp,
                                 color = if (uiState.focusBoardFull && !uiState.isPinnedToFocus) Color(0xFFFF3B30) else textSecondary
@@ -272,12 +283,11 @@ fun NoteEditorScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f, fill = false)
-                    .height(380.dp)
+                    .heightIn(min = 320.dp)
             ) {
                 if (uiState.content.isEmpty()) {
                     Text(
-                        text = "Start typing your note, checklist, or ideas…",
+                        text = "Note...",
                         style = MaterialTheme.typography.bodyLarge,
                         color = textSecondary.copy(alpha = 0.5f),
                         lineHeight = 24.sp
@@ -291,7 +301,7 @@ fun NoteEditorScreen(
                         lineHeight = 24.sp
                     ),
                     cursorBrush = SolidColor(textPrimary),
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

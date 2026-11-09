@@ -20,15 +20,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nouman.notevibe.domain.model.Note
@@ -37,7 +46,9 @@ import com.nouman.notevibe.presentation.components.EmptyState
 import com.nouman.notevibe.presentation.components.IosTopBar
 import com.nouman.notevibe.presentation.components.NoteCard
 import com.nouman.notevibe.presentation.components.PriorityFilterSegmentedControl
+import com.nouman.notevibe.presentation.components.SwipeableNoteCard
 import com.nouman.notevibe.presentation.components.springClickable
+import com.nouman.notevibe.presentation.theme.IosBlue
 import com.nouman.notevibe.presentation.theme.IosTextPrimaryDark
 import com.nouman.notevibe.presentation.theme.IosTextPrimaryLight
 import com.nouman.notevibe.presentation.theme.IosTextSecondaryDark
@@ -63,6 +74,8 @@ fun AllNotesScreen(
     val textPrimary = if (isDark) IosTextPrimaryDark else IosTextPrimaryLight
     val textSecondary = if (isDark) IosTextSecondaryDark else IosTextSecondaryLight
     val searchBg = if (isDark) Color(0xFF1C1C1E) else Color(0xFFE5E5EA)
+
+    var noteToDelete by remember { mutableStateOf<Note?>(null) }
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -171,15 +184,53 @@ fun AllNotesScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp, vertical = 6.dp)
                 ) {
-                    NoteCard(
+                    SwipeableNoteCard(
                         note = note,
                         onClick = { onNoteClick(note) },
+                        onEdit = { onNoteClick(note) },
+                        onDelete = { noteToDelete = note },
                         onToggleCompletion = { onToggleCompletion(note.id) },
-                        onTogglePin = { onTogglePin(note.id) },
-                        onDelete = { onDeleteNote(note.id) }
+                        onTogglePin = { onTogglePin(note.id) }
                     )
                 }
             }
         }
+    }
+
+    noteToDelete?.let { note ->
+        AlertDialog(
+            onDismissRequest = { noteToDelete = null },
+            title = {
+                Text(
+                    text = "Delete Note?",
+                    fontWeight = FontWeight.Bold,
+                    color = textPrimary
+                )
+            },
+            text = {
+                Text(
+                    text = "Are you sure you want to delete \"${if (note.title.isNotBlank()) note.title else "Untitled Note"}\"? This action cannot be undone.",
+                    color = textSecondary
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        onDeleteNote(note.id)
+                        noteToDelete = null
+                    },
+                    shape = SquirclePill,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF3B30))
+                ) {
+                    Text("Delete", color = Color.White)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { noteToDelete = null }) {
+                    Text("Cancel", color = IosBlue)
+                }
+            },
+            shape = SquircleMedium
+        )
     }
 }

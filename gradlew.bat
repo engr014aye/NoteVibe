@@ -35,6 +35,13 @@ for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
+@rem If JAVA_HOME is not set or defaults to an incompatible Java version, fallback to JDK 17 if installed
+if not defined JAVA_HOME (
+    if exist "C:\Program Files\Java\jdk-17\bin\java.exe" (
+        set "JAVA_HOME=C:\Program Files\Java\jdk-17"
+    )
+)
+
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
 

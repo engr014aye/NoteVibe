@@ -38,7 +38,12 @@ class EditorViewModel(
                             priority = existingNote.priority,
                             isPinnedToFocus = existingNote.isPinnedToFocus,
                             isCompleted = existingNote.isCompleted,
+                            completedAt = existingNote.completedAt,
+                            isArchived = existingNote.isArchived,
+                            createdAt = existingNote.createdAt,
                             isNewNote = false,
+                            isSaved = false,
+                            errorMessage = null,
                             focusBoardFull = isFull && !existingNote.isPinnedToFocus
                         )
                     }
@@ -48,6 +53,16 @@ class EditorViewModel(
 
             _uiState.update {
                 it.copy(
+                    id = 0L,
+                    title = "",
+                    content = "",
+                    priority = Priority.MEDIUM,
+                    isPinnedToFocus = false,
+                    isCompleted = false,
+                    completedAt = null,
+                    isArchived = false,
+                    isSaved = false,
+                    errorMessage = null,
                     isNewNote = true,
                     focusBoardFull = isFull
                 )
@@ -80,18 +95,28 @@ class EditorViewModel(
     fun saveNote() {
         val state = _uiState.value
         if (state.title.isBlank() && state.content.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Please enter a title or note body.") }
+            _uiState.update { it.copy(errorMessage = "Please enter a note.") }
             return
         }
 
         viewModelScope.launch {
+            val resolvedTitle = if (state.title.isNotBlank()) {
+                state.title.trim()
+            } else {
+                val firstLine = state.content.trim().lines().firstOrNull { it.isNotBlank() } ?: "Note"
+                if (firstLine.length > 40) firstLine.take(40) + "…" else firstLine
+            }
+
             val note = Note(
                 id = state.id,
-                title = state.title.trim(),
+                title = resolvedTitle,
                 content = state.content.trim(),
                 priority = state.priority,
                 isPinnedToFocus = state.isPinnedToFocus,
-                isCompleted = state.isCompleted
+                isCompleted = state.isCompleted,
+                completedAt = state.completedAt,
+                isArchived = state.isArchived,
+                createdAt = state.createdAt
             )
 
             val result = saveNoteUseCase(note)

@@ -55,24 +55,37 @@ class NotesViewModel(
         getArchivedNotesUseCase(query)
     }
 
-    val uiState: StateFlow<NotesUiState> = combine(
-        _focusNotes,
-        _activeNotes,
-        _archivedNotes,
+    private data class FilterState(
+        val searchQuery: String,
+        val priorityFilter: Priority?,
+        val currentTab: BottomTab,
+        val userMessage: String?
+    )
+
+    private val _filterState = combine(
         _searchQuery,
         _priorityFilter,
         _currentTab,
         _userMessage
-    ) { focusNotes, activeNotes, archivedNotes, searchQuery, priorityFilter, currentTab, userMessage ->
+    ) { searchQuery, priorityFilter, currentTab, userMessage ->
+        FilterState(searchQuery, priorityFilter, currentTab, userMessage)
+    }
+
+    val uiState: StateFlow<NotesUiState> = combine(
+        _focusNotes,
+        _activeNotes,
+        _archivedNotes,
+        _filterState
+    ) { focusNotes, activeNotes, archivedNotes, filterState ->
         NotesUiState(
             focusNotes = focusNotes,
             allNotes = activeNotes,
             archivedNotes = archivedNotes,
-            searchQuery = searchQuery,
-            priorityFilter = priorityFilter,
-            currentTab = currentTab,
+            searchQuery = filterState.searchQuery,
+            priorityFilter = filterState.priorityFilter,
+            currentTab = filterState.currentTab,
             focusStats = FocusBoardStats(pinnedCount = focusNotes.size),
-            userMessage = userMessage
+            userMessage = filterState.userMessage
         )
     }.stateIn(
         scope = viewModelScope,
@@ -86,6 +99,7 @@ class NotesViewModel(
     }
 
     fun onTabSelected(tab: BottomTab) {
+        _searchQuery.update { "" }
         _currentTab.update { tab }
     }
 

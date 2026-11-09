@@ -86,7 +86,7 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun restoreNote(noteId: Long) {
-        noteDao.restoreArchivedNote(noteId)
+        noteDao.restoreArchivedNote(noteId, System.currentTimeMillis())
     }
 
     override suspend fun autoArchiveCompletedNotes(olderThanMillis: Long): Int {

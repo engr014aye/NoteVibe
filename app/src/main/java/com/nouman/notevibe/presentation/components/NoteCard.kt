@@ -1,10 +1,5 @@
 package com.nouman.notevibe.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -180,18 +175,10 @@ fun NoteCard(
                             .springClickable(onClick = onToggleCompletion),
                         contentAlignment = Alignment.Center
                     ) {
-                        AnimatedVisibility(
-                            visible = note.isCompleted,
-                            enter = fadeIn(spring(stiffness = Spring.StiffnessHigh)),
-                            exit = fadeOut()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = "Completed",
-                                tint = Color.White,
-                                modifier = Modifier.size(14.dp)
-                            )
-                        }
+                        CompletedCheckIcon(
+                            isCompleted = note.isCompleted,
+                            size = 14.dp
+                        )
                     }
                     Spacer(modifier = Modifier.width(12.dp))
                 }
@@ -221,8 +208,13 @@ fun NoteCard(
                     // Show auto archive badge if completed
                     if (note.isCompleted && note.daysUntilArchive != null && !note.isArchived) {
                         Spacer(modifier = Modifier.height(6.dp))
+                        val archiveHint = when (note.daysUntilArchive) {
+                            0 -> "Auto-archives today"
+                            1 -> "Auto-archives tomorrow"
+                            else -> "Auto-archives in ${note.daysUntilArchive} days"
+                        }
                         Text(
-                            text = "Auto-archives in ${note.daysUntilArchive} days",
+                            text = archiveHint,
                             fontSize = 11.sp,
                             color = textSecondary,
                             fontWeight = FontWeight.Medium
