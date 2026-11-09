@@ -1,0 +1,11 @@
+<resources>
+    <color name="primary">#007AFF</color>
+    <color name="primary_dark">#0A84FF</color>
+    <color name="background_light">#F2F2F7</color>
+    <color name="background_dark">#000000</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1C1C1E</color>
+    <color name="priority_high">#FF3B30</color>
+    <color name="priority_medium">#FF9500</color>
+    <color name="priority_low">#34C759</color>
+</resources>

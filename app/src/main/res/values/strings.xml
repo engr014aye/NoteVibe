@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NoteVibe</string>
+    <string name="tab_focus">Focus</string>
+    <string name="tab_all_notes">Notes</string>
+    <string name="tab_archive">Archive</string>
+    <string name="focus_board_title">Focus Board</string>
+    <string name="focus_board_subtitle">Active Priorities (Max 3)</string>
+    <string name="add_note">New Note</string>
+    <string name="search_placeholder">Search notes &amp; ideas…</string>
+    <string name="empty_focus_title">Your Focus Board is Clear</string>
+    <string name="empty_focus_desc">Pin up to 3 high-impact notes here to power through your day without visual clutter.</string>
+    <string name="empty_notes_title">No Notes Yet</string>
+    <string name="empty_notes_desc">Tap + below to capture your thoughts, tasks, and ideas with fluid Apple-style aesthetics.</string>
+    <string name="empty_archive_title">Archive is Empty</string>
+    <string name="empty_archive_desc">Completed notes automatically transition here after 7 days to keep your workspace fresh.</string>
+</resources>

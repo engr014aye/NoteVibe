@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:translateX="21.6"
+        android:translateY="21.6">
+        <!-- Minimalist Note Card Base -->
+        <path
+            android:fillColor="#F8FAFC"
+            android:pathData="M24,12 L84,12 A12,12 0 0,1 96,24 L96,84 A12,12 0 0,1 84,96 L24,96 A12,12 0 0,1 12,84 L12,24 A12,12 0 0,1 24,12 Z" />
+        <!-- Top 3 Priority Focus Dots (Red, Amber, Green) -->
+        <path
+            android:fillColor="#FF3B30"
+            android:pathData="M24,24m-4,0a4,4 0 1,0 8,0a4,4 0 1,0 -8,0" />
+        <path
+            android:fillColor="#FF9500"
+            android:pathData="M36,24m-4,0a4,4 0 1,0 8,0a4,4 0 1,0 -8,0" />
+        <path
+            android:fillColor="#34C759"
+            android:pathData="M48,24m-4,0a4,4 0 1,0 8,0a4,4 0 1,0 -8,0" />
+        <!-- Row 1: High Priority Focus Task -->
+        <path
+            android:fillColor="#FF3B30"
+            android:pathData="M20,40 h12 v12 h-12 z" />
+        <path
+            android:fillColor="#1E293B"
+            android:pathData="M38,44 h44 v4 h-44 z" />
+        <!-- Row 2: Medium Priority Focus Task -->
+        <path
+            android:fillColor="#FF9500"
+            android:pathData="M20,58 h12 v12 h-12 z" />
+        <path
+            android:fillColor="#475569"
+            android:pathData="M38,62 h36 v4 h-36 z" />
+        <!-- Row 3: Low Priority Focus Task -->
+        <path
+            android:fillColor="#34C759"
+            android:pathData="M20,76 h12 v12 h-12 z" />
+        <path
+            android:fillColor="#64748B"
+            android:pathData="M38,80 h40 v4 h-40 z" />
+    </group>
+</vector>
